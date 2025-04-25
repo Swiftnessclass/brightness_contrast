@@ -1,6 +1,8 @@
 import streamlit as st
 import cv2
 import numpy as np
+from PIL import Image
+from io import BytesIO
 
 
 st.title("🎛️ Gamma Correction Tool")
@@ -36,3 +38,16 @@ if uploaded_file:
     st.subheader(f"Gamma Corrected Image (Gamma = {gamma})")
     st.image(corrected_img, use_column_width=True)
 
+ # Convert corrected image to PNG for download
+    corrected_pil = Image.fromarray(corrected_img)
+    buf = BytesIO()
+    corrected_pil.save(buf, format="PNG")
+    byte_im = buf.getvalue()
+
+    # Download button
+    st.download_button(
+        label="📥 Download Corrected Image",
+        data=byte_im,
+        file_name="gamma_corrected.png",
+        mime="image/png"
+    )
